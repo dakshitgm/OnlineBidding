@@ -1,10 +1,8 @@
 package com.dakshit.OnlineBidding.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 public class User {
@@ -13,9 +11,11 @@ public class User {
     private long id;
 
     @NotBlank(message = "user name should be blank")
+    @Column(unique = true)
     private String userName;
 
     @NotBlank(message = "email id should be blank")
+    @Column(unique = true)
     private String emailId;
 
     @NotBlank(message = "password should be blank")

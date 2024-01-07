@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/onlineBidding
+    username: root
+    password: db234
+    driver-class-name: com.mysql.jdbc.Driver
+
+jwt:
+  tokenExpirationMin: 120
+  secretCode: ImY0O7gBmc1rc8OqtON80DEi2/b+WmMpGK3hjl7Y/KM=
