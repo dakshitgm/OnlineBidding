@@ -1,4 +1,4 @@
-package com.dakshit.OnlineBidding.Entity;
+package com.dakshit.OnlineBidding.Payload.Request;
 
 import ch.qos.logback.core.joran.spi.NoAutoStart;
 

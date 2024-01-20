@@ -1,6 +1,6 @@
 package com.dakshit.OnlineBidding.Controller;
 
-import com.dakshit.OnlineBidding.Entity.AuthRequest;
+import com.dakshit.OnlineBidding.Payload.Request.AuthRequest;
 import com.dakshit.OnlineBidding.Entity.User;
 import com.dakshit.OnlineBidding.Exception.DuplicateUserException;
 import com.dakshit.OnlineBidding.Payload.Response.LoginSuccessResponse;

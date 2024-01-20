@@ -1,7 +1,9 @@
-package com.dakshit.OnlineBidding.Services;
+package com.dakshit.OnlineBidding.Services.Impl;
 
 import com.dakshit.OnlineBidding.Entity.User;
 import com.dakshit.OnlineBidding.Exception.DuplicateUserException;
+import com.dakshit.OnlineBidding.Services.UserDetailsImpl;
+import com.dakshit.OnlineBidding.Services.UserService;
 import com.dakshit.OnlineBidding.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
