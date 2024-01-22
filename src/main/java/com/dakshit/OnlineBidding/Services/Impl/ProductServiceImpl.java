@@ -32,12 +32,13 @@ public class ProductServiceImpl implements ProductService {
         if(productOptional.isPresent())
             return productOptional.get();
 
-        // ToDo: Make exception class to throw excetpion product not exist
+        // ToDo: Make exception class to throw exception product not exist
         throw new Exception("product not exist");
     }
 
     @Override
     public Product updateProduct(long id, Product product) {
+        //TODO: Implements update product
         return null;
     }
 

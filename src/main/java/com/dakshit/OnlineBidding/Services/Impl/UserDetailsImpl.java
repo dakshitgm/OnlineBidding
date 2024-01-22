@@ -1,4 +1,4 @@
-package com.dakshit.OnlineBidding.Services;
+package com.dakshit.OnlineBidding.Services.Impl;
 
 import com.dakshit.OnlineBidding.Entity.User;
 import org.springframework.security.core.GrantedAuthority;

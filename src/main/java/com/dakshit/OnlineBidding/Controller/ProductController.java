@@ -6,6 +6,7 @@ import com.dakshit.OnlineBidding.Payload.Request.ProductDTO;
 import com.dakshit.OnlineBidding.Payload.Response.ProductViewDTO;
 import com.dakshit.OnlineBidding.Services.ProductService;
 import com.dakshit.OnlineBidding.Entity.User;
+import com.dakshit.OnlineBidding.Utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,18 +23,16 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    private User getLoggedInUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (User) authentication.getPrincipal();
-    }
+    @Autowired
+    private UserUtils userUtils;
 
     @PostMapping("/")
-    public ResponseEntity<?>  addProduct(ProductDTO productDTO){
+    public ResponseEntity<?>  addProduct(@RequestBody ProductDTO productDTO){
         Product product = new Product();
 
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
-        product.setSeller(getLoggedInUser());
+        product.setSeller(userUtils.getLoggedInUser());
 
         productService.addProduct(product);
         return ResponseEntity.ok("product added successfully");
