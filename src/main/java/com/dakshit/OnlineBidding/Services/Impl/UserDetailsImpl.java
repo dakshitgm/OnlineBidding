@@ -21,6 +21,14 @@ public class UserDetailsImpl implements UserDetails {
         this.password=password;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public static UserDetailsImpl build(User user) {
         System.out.println("do UserDetailsImpl build！");
         return new UserDetailsImpl(

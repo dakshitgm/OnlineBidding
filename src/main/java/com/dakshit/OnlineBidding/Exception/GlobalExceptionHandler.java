@@ -8,9 +8,32 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.core.Ordered;
 
-//@ControllerAdvice
-@Order(Ordered.LOWEST_PRECEDENCE)
+@ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(DuplicateUserException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<?> duplicateUserException(DuplicateUserException duplicateUserException){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(duplicateUserException.getMessage());
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<?> productNotFoundExceptionHandler(ProductNotFoundException productNotFoundException){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(productNotFoundException.getMessage());
+    }
+
+    @ExceptionHandler(BidNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<?> bidNotFoundExceptionHandler(BidNotFoundException bidNotFoundException){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(bidNotFoundException.getMessage());
+    }
+
+    @ExceptionHandler(UnauthorisedAccessException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<?> unauthorisedAccessExceptionHandler(UnauthorisedAccessException unauthorisedAccessException){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(unauthorisedAccessException.getMessage());
+    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -1,7 +1,5 @@
 package com.dakshit.OnlineBidding.Entity;
 
-import com.dakshit.OnlineBidding.Payload.Request.ProductDTO;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -18,8 +16,20 @@ public class Product {
     //private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name = "seller_id")
+    @JoinColumn(name = "seller_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User seller;
+
+    @Column(name = "seller_id")
+    private long sellerId;
+
+    public long getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(long sellerId) {
+        this.sellerId = sellerId;
+    }
+
 
     public Product(){
 

@@ -14,5 +14,5 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
 
 jwt:
-  tokenExpirationMin: 120
+  tokenExpirationMin: 200
   secretCode: ImY0O7gBmc1rc8OqtON80DEi2/b+WmMpGK3hjl7Y/KM=

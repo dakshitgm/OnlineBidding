@@ -1,14 +1,14 @@
 package com.dakshit.OnlineBidding.Controller;
 
 import com.dakshit.OnlineBidding.Entity.Bid;
-import com.dakshit.OnlineBidding.Entity.Product;
+import com.dakshit.OnlineBidding.Exception.BidNotFoundException;
+import com.dakshit.OnlineBidding.Exception.UnauthorisedAccessException;
 import com.dakshit.OnlineBidding.Payload.Request.BidRequest;
 import com.dakshit.OnlineBidding.Payload.Response.BidResponse;
 import com.dakshit.OnlineBidding.Services.BidServices;
 import com.dakshit.OnlineBidding.Services.ProductService;
 import com.dakshit.OnlineBidding.Utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +28,14 @@ public class BidController {
     private UserUtils userUtils;
 
     @PostMapping("")
-    public ResponseEntity<?> addBid(@RequestBody BidRequest bidRequest) throws Exception {
+    public ResponseEntity<?> addBid(@RequestBody BidRequest bidRequest) throws BidNotFoundException, UnauthorisedAccessException {
         Bid bid = new Bid();
         bid.setProductId(bidRequest.getProductId());
-        bid.setBidderId(userUtils.getLoggedInUser().getId());
+        bid.setProduct(productService.getProduct(bid.getProductId()));
+        bid.setBidderId(userUtils.getLoggedInUserId());
         bid.setPrice(bidRequest.getPrice());
 
-        bidServices.addBid(bid);
+        bidServices.addBid(bid, userUtils.getLoggedInUserId());
 
         return ResponseEntity.ok("Bid added successfully");
     }
@@ -52,7 +53,7 @@ public class BidController {
 
     @GetMapping("/mybids")
     public List<BidResponse> getBidList(){
-        List<Bid> bidList = bidServices.getBidListByUser(userUtils.getLoggedInUser().getId());
+        List<Bid> bidList = bidServices.getBidListByUser(userUtils.getLoggedInUserId());
 
         List<BidResponse> bidResponseList = bidList
                 .stream()
@@ -63,19 +64,19 @@ public class BidController {
     }
 
     @GetMapping("/{bidId}")
-    public BidResponse getBid(@PathVariable("bidId") long bidId) throws Exception {
-        Bid bid = bidServices.getBid(bidId);
+    public BidResponse getBid(@PathVariable("bidId") long bidId) throws BidNotFoundException, UnauthorisedAccessException {
+        Bid bid = bidServices.getBid(bidId, userUtils.getLoggedInUserId());
         return new BidResponse(bid);
     }
 
 
-    @PutMapping("/")
-    public ResponseEntity<?> updateBid(@PathVariable Long bidId, @RequestBody BidRequest bidRequest) throws Exception {
+    @PutMapping("/{bidId}")
+    public ResponseEntity<?> updateBid(@PathVariable Long bidId, @RequestBody BidRequest bidRequest) throws BidNotFoundException, UnauthorisedAccessException {
 
         Bid bid = new Bid();
         bid.setId(bidId);
         bid.setProductId(bidRequest.getProductId());
-        bid.setBidderId(userUtils.getLoggedInUser().getId());
+        bid.setBidderId(userUtils.getLoggedInUserId());
         bid.setPrice(bidRequest.getPrice());
 
         bidServices.updateBid(bidId, bid);
@@ -84,8 +85,8 @@ public class BidController {
     }
 
     @DeleteMapping("/{bidId}")
-    public ResponseEntity<?> deleteBid(@PathVariable("bidId") long bidId) throws Exception{
-        bidServices.deleteBid(bidId);
+    public ResponseEntity<?> deleteBid(@PathVariable("bidId") long bidId) throws BidNotFoundException, UnauthorisedAccessException{
+        bidServices.deleteBid(bidId, userUtils.getLoggedInUserId());
         return ResponseEntity.ok("Bid deleted successfully");
     }
 

@@ -2,6 +2,9 @@ package com.dakshit.OnlineBidding.Services.Impl;
 
 
 import com.dakshit.OnlineBidding.Entity.Product;
+import com.dakshit.OnlineBidding.Entity.User;
+import com.dakshit.OnlineBidding.Exception.ProductNotFoundException;
+import com.dakshit.OnlineBidding.Exception.UnauthorisedAccessException;
 import com.dakshit.OnlineBidding.Services.ProductService;
 import com.dakshit.OnlineBidding.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +30,37 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProduct(long id) throws Exception{
-        Optional<Product> productOptional = productRepository.findById(id);
-        if(productOptional.isPresent())
-            return productOptional.get();
-
-        // ToDo: Make exception class to throw exception product not exist
-        throw new Exception("product not exist");
+    public List<Product> getUserProductList(long userId){
+        return productRepository.findBySellerId(userId);
     }
 
     @Override
-    public Product updateProduct(long id, Product product) {
-        //TODO: Implements update product
-        return null;
+    public Product getProduct(long id) throws ProductNotFoundException{
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isPresent())
+            return productOptional.get();
+        throw new ProductNotFoundException("product not found with this id " + id);
+    }
+
+    @Override
+    public void updateProduct(long id, Product body, long userId) throws ProductNotFoundException, UnauthorisedAccessException {
+        Optional productOptional = productRepository.findById(id);
+
+        if(!productOptional.isPresent())
+            throw new ProductNotFoundException("product not found with this id " + id);
+
+
+        Product product = (Product) productOptional.get();
+
+        if(product.getSeller().getId() != userId){
+
+            throw new UnauthorisedAccessException("you cannot change this product details");
+        }
+
+        product.setName(body.getName());
+        product.setDescription(body.getDescription());
+
+        productRepository.save(product);
     }
 
     @Override
