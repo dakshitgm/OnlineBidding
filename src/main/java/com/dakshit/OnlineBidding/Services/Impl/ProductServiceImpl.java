@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -82,6 +83,7 @@ public class ProductServiceImpl implements ProductService {
             ProductImage productImage = new ProductImage();
             productImage.setProductId(productId);
             productImage.setImage(image.getBytes());
+            productImageRepository.save(productImage);
         } catch (IOException ioException){
             System.out.println(ioException.toString());
         }
@@ -89,11 +91,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public byte[] getImage(long productId) {
-        Optional productImageOptional = productImageRepository.findByProductId(productId);
-
-        if(!productImageOptional.isPresent())
-            throw new ProductNotFoundException("image not found for this product id");
-
-        return (byte[]) productImageOptional.get();
+       ProductImage productImage = productImageRepository.findByProductId(productId);
+       return productImage.getImage();
     }
 }

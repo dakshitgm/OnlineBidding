@@ -1,5 +1,7 @@
 package com.dakshit.OnlineBidding.Entity;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,7 +11,7 @@ public class ProductImage {
     private long id;
 
 
-    @Column(name = "product_id")
+    @Column(name = "product_id", unique = true)
     private long productId;
 
     @ManyToOne

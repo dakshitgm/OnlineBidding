@@ -9,6 +9,7 @@ import com.dakshit.OnlineBidding.Payload.Response.ProductViewDTO;
 import com.dakshit.OnlineBidding.Services.ProductService;
 import com.dakshit.OnlineBidding.Utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -86,17 +87,16 @@ public class ProductController {
     }
 
 
-    @PostMapping("/image")
-    public ResponseEntity<?> uploadProductImage(long productId, MultipartFile file){
+    @PostMapping("/{productId}/image")
+    public ResponseEntity<?> uploadProductImage(@PathVariable("productId") long productId, @RequestParam("file") MultipartFile file){
         productService.saveImage(productId, file);
-        return ResponseEntity.ok("product Uploaded successfully");
+        return ResponseEntity.ok("image Uploaded successfully");
     }
 
     @GetMapping("/{productId}/image")
-    public byte[] getImage(@PathVariable long productId){
-        return productService.getImage(productId);
+    public ResponseEntity<byte[]> getImage(@PathVariable("productId") long productId){
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(productService.getImage(productId));
     }
-
 
 
 }
