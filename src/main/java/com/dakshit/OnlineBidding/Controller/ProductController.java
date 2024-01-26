@@ -11,6 +11,7 @@ import com.dakshit.OnlineBidding.Utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
@@ -82,6 +83,18 @@ public class ProductController {
         productService.deleteProduct(id);
 
         return ResponseEntity.ok("product deleted successfully");
+    }
+
+
+    @PostMapping("/image")
+    public ResponseEntity<?> uploadProductImage(long productId, MultipartFile file){
+        productService.saveImage(productId, file);
+        return ResponseEntity.ok("product Uploaded successfully");
+    }
+
+    @GetMapping("/{productId}/image")
+    public byte[] getImage(@PathVariable long productId){
+        return productService.getImage(productId);
     }
 
 

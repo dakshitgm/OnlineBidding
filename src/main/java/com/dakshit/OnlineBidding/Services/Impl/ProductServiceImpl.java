@@ -2,14 +2,18 @@ package com.dakshit.OnlineBidding.Services.Impl;
 
 
 import com.dakshit.OnlineBidding.Entity.Product;
+import com.dakshit.OnlineBidding.Entity.ProductImage;
 import com.dakshit.OnlineBidding.Entity.User;
 import com.dakshit.OnlineBidding.Exception.ProductNotFoundException;
 import com.dakshit.OnlineBidding.Exception.UnauthorisedAccessException;
 import com.dakshit.OnlineBidding.Services.ProductService;
+import com.dakshit.OnlineBidding.repository.ProductImageRepository;
 import com.dakshit.OnlineBidding.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +22,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductImageRepository productImageRepository;
 
     @Override
     public Product addProduct(Product product) {
@@ -66,5 +73,27 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(long id) {
         productRepository.deleteById(id);
+    }
+
+
+    @Override
+    public void saveImage(long productId, MultipartFile image) {
+        try {
+            ProductImage productImage = new ProductImage();
+            productImage.setProductId(productId);
+            productImage.setImage(image.getBytes());
+        } catch (IOException ioException){
+            System.out.println(ioException.toString());
+        }
+    }
+
+    @Override
+    public byte[] getImage(long productId) {
+        Optional productImageOptional = productImageRepository.findByProductId(productId);
+
+        if(!productImageOptional.isPresent())
+            throw new ProductNotFoundException("image not found for this product id");
+
+        return (byte[]) productImageOptional.get();
     }
 }
